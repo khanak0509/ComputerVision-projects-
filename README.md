@@ -1,1 +1,1 @@
-Compter Vision projets
+🤖 Computer Vision projects — from pixels to possibilities. 👁️✨
