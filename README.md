@@ -1,1 +1,1 @@
-🤖 Computer Vision projects — from pixels to possibilities. 👁️✨
+🤖 Computer Vision projects with Python, OpenCV & MediaPipe! 👁️✨
