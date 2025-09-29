@@ -1,9 +1,6 @@
 import cv2
-import mediapipe as mp
-import time 
 import numpy as np
-ptime =0 
-ctime =0 
+canvas = np.zeros((720, 1280, 3), np.uint8)
 
 
 def Canny_Edge(img, weak_th=None, strong_th=None):
@@ -62,30 +59,31 @@ def Canny_Edge(img, weak_th=None, strong_th=None):
                 ids[i_y, i_x] = 2
     return mag
 
-capture = cv2.VideoCapture(0)
 
-while True:
-    success , img = capture.read()
 
-    if not success:
-        break
-    img = cv2.flip(img,1)
 
-    gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+img = cv2.imread("image.png")  
 
-    blurred_img = cv2.GaussianBlur(img, (5, 5), 0) 
+
+gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+blurred_img = cv2.GaussianBlur(gray_image, (5, 5), 0) 
     
-    # Apply custom Canny edge detection
-    edges = Canny_Edge(gray_image)
-    edges = np.uint8(edges)
+edges = Canny_Edge(gray_image)
+edges = np.uint8(edges)
 
 
-    contours, hierarchy=cv2.findContours(edges,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
-    cv2.drawContours(edges, contours, -1, (0,255,0), 2)
-    
+contours, hierarchy=cv2.findContours(edges,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
+cv2.drawContours(img, contours, -1, (0,255,0), 1)
+doc_box = sorted(contours,key=cv2.contourArea,reverse=True)[0]
+cv2.drawContours(canvas,contours, -1, (0,255,0), 1)
+cv2.drawContours(img,[doc_box], -1, (0,255,0), 3)
 
-    cv2.imshow("edges", edges)
 
+cv2.imshow("Document Contour",img)
+cv2.imshow(". ",canvas)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+# Show
+cv2.imshow("Document Contour", img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
